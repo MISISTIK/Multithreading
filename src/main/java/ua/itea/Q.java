@@ -9,7 +9,6 @@ public class Q {
 
     }
 
-
     synchronized int getX() {
         while (check) {
             System.out.println("Consumer Waiting");
