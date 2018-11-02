@@ -18,6 +18,7 @@ public class Main {
     static CountDownLatch BARRIER = new CountDownLatch(1);
     static Semaphore semaphore = new Semaphore(1);
     static int sitSec = 3;
+    static boolean isFirstTimePlayed = true;
 
 
     public static void main(String[] args) {
@@ -68,6 +69,12 @@ public class Main {
         player.setOnEndOfMedia(() -> {player.seek(Duration.ZERO); player.play();});
         player.setOnPaused(() -> {
             System.out.println(player.getStatus().toString());
+            /*if (!isFirstTimePlayed) {
+                semaphore.release();
+            } else {
+                BARRIER.countDown();
+            }*/
+
             semaphore.release();
             /*try {
                 long v = ((long) ((Math.random() + 1) * 1000) * 2);
