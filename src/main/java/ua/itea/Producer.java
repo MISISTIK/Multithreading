@@ -1,7 +1,5 @@
 package ua.itea;
 
-import java.util.concurrent.TimeUnit;
-
 public class Producer extends Thread {
     Q q = new Q();
 

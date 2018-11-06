@@ -2,6 +2,7 @@ package ua.itea;
 
 import java.util.concurrent.TimeUnit;
 
+
 public class Consumer extends Thread {
     Q q = new Q();
 
@@ -15,8 +16,13 @@ public class Consumer extends Thread {
 
     @Override
     public void run() {
+
         while (true) {
-            this.cons_x += q.getX();
+            try {
+                this.cons_x += q.getX();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

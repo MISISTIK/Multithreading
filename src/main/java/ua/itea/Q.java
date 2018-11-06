@@ -1,7 +1,12 @@
 package ua.itea;
 
+import java.util.concurrent.Semaphore;
+
+
 public class Q {
     private int x = 0;
+    Semaphore p = new Semaphore(0);
+    Semaphore c = new Semaphore(1);
 
     volatile boolean check = true;
 
@@ -10,32 +15,40 @@ public class Q {
     }
 
 
-    synchronized int getX() {
-        while (check) {
+    synchronized int getX() throws InterruptedException {
+        p.acquire();
+        /*while (check) {
             System.out.println("Consumer Waiting");
             try {
-                wait();
+                semaphore.acquire();
+                check = !check;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
+
         int temp = this.x;
         System.out.println("Consumed " + String.valueOf(temp));
         this.x = 0;
-        check = !check;
-        notify();
+//        notify();
+//        semaphore.release();
+        c.release();
         return temp;
     }
 
     synchronized void putX(int x) throws InterruptedException {
-        while (!check) {
-            System.out.println("Producer Waiting");
-            wait();
-        }
+        c.acquire();
+//        while (!check) {
+//            System.out.println("Producer Waiting");
+//            check = !check;
+//        }
+
         this.x += x;
         System.out.println("Produced " + String.valueOf(x));
-        check = !check;
-        notify();
+
+       // notify();
+//        semaphore.release();
+        p.release();
     }
 }
 
